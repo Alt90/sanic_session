@@ -1,7 +1,7 @@
-import time
 import abc
 import ujson
 import uuid
+from datetime import datetime, timedelta
 from sanic_session.utils import CallbackDict
 
 
@@ -39,8 +39,7 @@ class BaseSessionInterface(metaclass=abc.ABCMeta):
 
     @staticmethod
     def _calculate_expires(expiry):
-        expires = time.time() + expiry
-        return time.strftime("%a, %d-%b-%Y %T GMT", time.gmtime(expires))
+        return datetime.utcnow() + timedelta(seconds=expiry)
 
     def _set_cookie_props(self, request, response):
         response.cookies[self.cookie_name] = request[self.session_name].sid
